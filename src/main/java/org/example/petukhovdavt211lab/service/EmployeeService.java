@@ -10,7 +10,7 @@ public interface EmployeeService {
 
     Employee getEmployeeById(Long id);
 
-    Employee updateEmployee(Long id, String fullName, LocalDate birthDate, String position, Long bankId,
+    Employee updateEmployee(Long id, String fullName, String position, Long bankId,
                             Boolean isRemote, Long bankOfficeId, Boolean canIssueLoans, Integer salary);
 
     void deleteEmployee(Long id);

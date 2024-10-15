@@ -20,8 +20,8 @@ public class CreditAccount {
     @ManyToOne
     private User user;
 
-    @Column(nullable = false)
-    private String bankName;
+    @ManyToOne
+    private Bank bank;
 
     @Column(nullable = false)
     private LocalDate startDate;

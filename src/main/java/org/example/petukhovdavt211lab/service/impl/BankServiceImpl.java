@@ -17,6 +17,10 @@ public class BankServiceImpl implements BankService {
     public Bank createBank(String name) {
         Bank bank = new Bank();
         bank.setName(name);
+        bank.setCountOffices(0);
+        bank.setCountAtms(0);
+        bank.setCountEmployees(0);
+        bank.setCountClients(0);
         bank.setRating((int)(Math.random() * 101));
         bank.setTotalMoney((int)(Math.random() * 1_000_001));
         bank.setInterestRate((float)(Math.random() * (20 - (bank.getRating() / 5.0)) + 1));

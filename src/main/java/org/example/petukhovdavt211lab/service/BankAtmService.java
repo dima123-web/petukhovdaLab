@@ -1,9 +1,6 @@
 package org.example.petukhovdavt211lab.service;
 
-import org.example.petukhovdavt211lab.entity.Bank;
 import org.example.petukhovdavt211lab.entity.BankAtm;
-import org.example.petukhovdavt211lab.entity.BankOffice;
-import org.example.petukhovdavt211lab.entity.Employee;
 
 public interface BankAtmService {
 

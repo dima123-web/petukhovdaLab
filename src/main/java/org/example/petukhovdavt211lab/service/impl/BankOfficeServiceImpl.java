@@ -2,8 +2,10 @@ package org.example.petukhovdavt211lab.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.example.petukhovdavt211lab.entity.Bank;
+import org.example.petukhovdavt211lab.entity.BankAtm;
 import org.example.petukhovdavt211lab.entity.BankOffice;
 import org.example.petukhovdavt211lab.repository.BankOfficeRepository;
+import org.example.petukhovdavt211lab.repository.BankRepository;
 import org.example.petukhovdavt211lab.service.BankOfficeService;
 import org.example.petukhovdavt211lab.service.BankService;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 public class BankOfficeServiceImpl implements BankOfficeService {
 
     private final BankOfficeRepository bankOfficeRepository;
+    private final BankRepository bankRepository;
     private final BankService bankService;
 
     @Override
@@ -22,6 +25,7 @@ public class BankOfficeServiceImpl implements BankOfficeService {
                                  Boolean isDepositingMoney, Integer rentalCost) {
         BankOffice bankOffice = new BankOffice();
         Bank bank = bankService.getBankById(bankId);
+        bank.setCountOffices(bank.getCountOffices() + 1);
         bankOffice.setBank(bank);
         bankOffice.setName(name);
         bankOffice.setAddress(address);
@@ -33,6 +37,7 @@ public class BankOfficeServiceImpl implements BankOfficeService {
         bankOffice.setIsDepositingMoney(isDepositingMoney);
         bankOffice.setAmountOfMoney((int)(Math.random() * bank.getTotalMoney()));
         bankOffice.setRentalCost(rentalCost);
+        bankRepository.save(bank);
         bankOfficeRepository.save(bankOffice);
         return bankOffice;
     }
@@ -63,6 +68,10 @@ public class BankOfficeServiceImpl implements BankOfficeService {
 
     @Override
     public void deleteBankOffice(Long id) {
+        BankOffice bankOffice = getBankOfficeById(id);
+        Bank bank = bankOffice.getBank();
+        bank.setCountOffices(bank.getCountOffices() - 1);
+        bankRepository.save(bank);
         bankOfficeRepository.deleteById(id);
     }
 }
