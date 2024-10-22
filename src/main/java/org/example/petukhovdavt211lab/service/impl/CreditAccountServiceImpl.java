@@ -4,7 +4,10 @@ package org.example.petukhovdavt211lab.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.example.petukhovdavt211lab.entity.Bank;
 import org.example.petukhovdavt211lab.entity.CreditAccount;
+import org.example.petukhovdavt211lab.entity.PaymentAccount;
+import org.example.petukhovdavt211lab.entity.User;
 import org.example.petukhovdavt211lab.repository.CreditAccountRepository;
+import org.example.petukhovdavt211lab.repository.UserRepository;
 import org.example.petukhovdavt211lab.service.*;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +22,14 @@ public class CreditAccountServiceImpl implements CreditAccountService {
     private final BankService bankService;
     private final EmployeeService employeeService;
     private final PaymentAccountService paymentAccountService;
+    private final UserRepository userRepository;
+
+    public User addCreditAccountToUser(Long userId, Long creditAccountId) {
+        User user = userService.getUserById(userId);
+        CreditAccount creditAccount = getCreditAccountById(creditAccountId);
+        user.getCreditAccounts().add(creditAccount);
+        return userRepository.save(user);
+    }
 
     @Override
     public CreditAccount createCreditAccount(Long userId, Long bankId, LocalDate startDate, LocalDate endDate,
@@ -43,6 +54,7 @@ public class CreditAccountServiceImpl implements CreditAccountService {
         creditAccount.setIssuingEmployee(employeeService.getEmployeeById(issuingEmployeeId));
         creditAccount.setPaymentAccount(paymentAccountService.getPaymentAccountById(paymentAccountId));
         creditAccountRepository.save(creditAccount);
+        addCreditAccountToUser(userId, creditAccount.getId());
         return creditAccount;
     }
 

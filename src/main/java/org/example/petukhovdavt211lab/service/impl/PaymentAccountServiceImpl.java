@@ -4,8 +4,10 @@ package org.example.petukhovdavt211lab.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.example.petukhovdavt211lab.entity.Bank;
 import org.example.petukhovdavt211lab.entity.PaymentAccount;
+import org.example.petukhovdavt211lab.entity.User;
 import org.example.petukhovdavt211lab.repository.BankRepository;
 import org.example.petukhovdavt211lab.repository.PaymentAccountRepository;
+import org.example.petukhovdavt211lab.repository.UserRepository;
 import org.example.petukhovdavt211lab.service.BankService;
 import org.example.petukhovdavt211lab.service.PaymentAccountService;
 import org.example.petukhovdavt211lab.service.UserService;
@@ -19,7 +21,21 @@ public class PaymentAccountServiceImpl implements PaymentAccountService {
     private final BankRepository bankRepository;
     private final UserService userServices;
     private final BankService bankService;
+    private final UserRepository userRepository;
 
+    public User addBankToUser(Long userId, Long bankId) {
+        User user = userServices.getUserById(userId);
+        Bank bank = bankService.getBankById(bankId);
+        user.getBanks().add(bank);
+        return userRepository.save(user);
+    }
+
+    public User addPaymentAccountToUser(Long userId, Long paymentAccountId) {
+        User user = userServices.getUserById(userId);
+        PaymentAccount paymentAccount = getPaymentAccountById(paymentAccountId);
+        user.getPaymentAccounts().add(paymentAccount);
+        return userRepository.save(user);
+    }
 
     @Override
     public PaymentAccount createPaymentAccount(Long userId, Long bankId) {
@@ -29,8 +45,10 @@ public class PaymentAccountServiceImpl implements PaymentAccountService {
         bank.setCountClients(bank.getCountClients() + 1);
         paymentAccount.setBank(bank);
         paymentAccount.setAmount(0);
+        addBankToUser(userId, bankId);
         bankRepository.save(bank);
         paymentAccountRepository.save(paymentAccount);
+        addPaymentAccountToUser(userId, paymentAccount.getId());
         return paymentAccount;
     }
 

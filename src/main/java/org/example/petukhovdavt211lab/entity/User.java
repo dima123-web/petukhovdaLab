@@ -37,12 +37,12 @@ public class User {
 
     @OneToMany
     @JoinTable(name = "user_credit_account", joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "credit_account_id"))
+            inverseJoinColumns = @JoinColumn(name = "id"))
     private List<CreditAccount> creditAccounts;
 
     @OneToMany
     @JoinTable(name = "user_payment_account", joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "payment_account_id"))
+            inverseJoinColumns = @JoinColumn(name = "id"))
     private List<PaymentAccount> paymentAccounts;
 
     @Column(nullable = false)
