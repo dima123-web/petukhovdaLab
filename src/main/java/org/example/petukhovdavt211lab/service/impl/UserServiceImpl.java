@@ -1,9 +1,11 @@
 package org.example.petukhovdavt211lab.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.example.petukhovdavt211lab.dto.UserDto;
 import org.example.petukhovdavt211lab.entity.User;
 import org.example.petukhovdavt211lab.repository.UserRepository;
 import org.example.petukhovdavt211lab.service.UserService;
+import org.example.petukhovdavt211lab.service.mapper.UserMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -13,9 +15,10 @@ import java.time.LocalDate;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     @Override
-    public User createUser(String fullName, LocalDate birthDate, String workplace) {
+    public UserDto createUser(String fullName, LocalDate birthDate, String workplace) {
         User user = new User();
         user.setFullName(fullName);
         user.setBirthDate(birthDate);
@@ -23,7 +26,7 @@ public class UserServiceImpl implements UserService {
         user.setMonthlyIncome((int)(Math.random() * 10_000));
         user.setCreditRating((user.getMonthlyIncome() / 1000) * 100);
         userRepository.save(user);
-        return user;
+        return userMapper.toDto(user);
     }
 
     @Override
@@ -33,12 +36,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(Long id, String fullName, String workplace) {
+    public UserDto getUserByIdDto(Long id) {
+        return userMapper.toDto(getUserById(id));
+    }
+
+    @Override
+    public UserDto updateUser(Long id, String fullName, String workplace) {
         User user = getUserById(id);
         user.setFullName(fullName);
         user.setWorkplace(workplace);
         userRepository.save(user);
-        return user;
+        return userMapper.toDto(user);
     }
 
     @Override

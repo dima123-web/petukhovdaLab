@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.example.petukhovdavt211lab.dto.BankOfficeDto;
 import org.example.petukhovdavt211lab.entity.BankOffice;
 import org.example.petukhovdavt211lab.service.BankOfficeService;
 import org.springframework.web.bind.annotation.*;
@@ -23,11 +24,11 @@ public class BankOfficeController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Банковский офис создан",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = BankOffice.class))})
+                            schema = @Schema(implementation = BankOfficeDto.class))})
     })
 
     @PostMapping
-    public BankOffice createBank(@RequestParam("bankId") Long bankId, @RequestParam("name") String name,
+    public BankOfficeDto createBank(@RequestParam("bankId") Long bankId, @RequestParam("name") String name,
                                  @RequestParam("address") String address, @RequestParam("status") Boolean status,
                                  @RequestParam("canPlaceAtm") Boolean canPlaceAtm,
                                  @RequestParam("canIssueLoan") Boolean canIssueLoan,
@@ -43,12 +44,12 @@ public class BankOfficeController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Банковский офис найден",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = BankOffice.class))})
+                            schema = @Schema(implementation = BankOfficeDto.class))})
     })
 
     @GetMapping("/{id}")
-    public BankOffice getBankOfficeById(@Parameter(description = "ID банковского офиса") @PathVariable("id") Long id) {
-        return bankOfficeService.getBankOfficeById(id);
+    public BankOfficeDto getBankOfficeById(@Parameter(description = "ID банковского офиса") @PathVariable("id") Long id) {
+        return bankOfficeService.getBankOfficeByIdDto(id);
     }
 
     // изменение данных в банковском офисе
@@ -56,11 +57,11 @@ public class BankOfficeController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Данные изменены",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = BankOffice.class))})
+                            schema = @Schema(implementation = BankOfficeDto.class))})
     })
 
     @PatchMapping("/{id}")
-    public BankOffice updateBankOffice(@PathVariable("id") Long id, @RequestParam("bankId") Long bankId,
+    public BankOfficeDto updateBankOffice(@PathVariable("id") Long id, @RequestParam("bankId") Long bankId,
                                        @RequestParam("name") String name, @RequestParam("address") String address,
                                        @RequestParam("status") Boolean status,
                                        @RequestParam("canPlaceAtm") Boolean canPlaceAtm,
@@ -77,7 +78,7 @@ public class BankOfficeController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Банковский офис удален",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = BankOffice.class))})
+                            schema = @Schema(implementation = BankOfficeDto.class))})
     })
 
     @DeleteMapping("/{id}")

@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.example.petukhovdavt211lab.dto.CreditAccountDto;
 import org.example.petukhovdavt211lab.entity.CreditAccount;
 import org.example.petukhovdavt211lab.service.CreditAccountService;
 import org.springframework.web.bind.annotation.*;
@@ -25,11 +26,11 @@ public class CreditAccountController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "кредитный счет создан",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = CreditAccount.class))})
+                            schema = @Schema(implementation = CreditAccountDto.class))})
     })
 
     @PostMapping
-    public CreditAccount createCreditAccount(@RequestParam("userId") Long userId, @RequestParam("bankId") Long bankId,
+    public CreditAccountDto createCreditAccount(@RequestParam("userId") Long userId, @RequestParam("bankId") Long bankId,
                                              @RequestParam("startDate") LocalDate startDate,
                                              @RequestParam("endDate") LocalDate endDate,
                                              @RequestParam("loanAmount") Integer loanAmount,
@@ -45,13 +46,13 @@ public class CreditAccountController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "кредитный счет найден",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = CreditAccount.class))})
+                            schema = @Schema(implementation = CreditAccountDto.class))})
     })
 
     @GetMapping("/{id}")
-    public CreditAccount getCreditAccountById(@Parameter(description = "ID кредитного счета")
+    public CreditAccountDto getCreditAccountById(@Parameter(description = "ID кредитного счета")
                                                   @PathVariable("id") Long id) {
-        return creditAccountService.getCreditAccountById(id);
+        return creditAccountService.getCreditAccountByIdDto(id);
     }
 
     // изменение данных кредитного счета
@@ -59,11 +60,11 @@ public class CreditAccountController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Данные изменены",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = CreditAccount.class))})
+                            schema = @Schema(implementation = CreditAccountDto.class))})
     })
 
     @PatchMapping("/{id}")
-    public CreditAccount updateCreditAccount(@PathVariable("id") Long id,
+    public CreditAccountDto updateCreditAccount(@PathVariable("id") Long id,
                                         @RequestParam("paymentAccountId") Long paymentAccountId) {
         return creditAccountService.updateCreditAccount(id, paymentAccountId);
     }
@@ -73,7 +74,7 @@ public class CreditAccountController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "кредитный счет удален",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = CreditAccount.class))})
+                            schema = @Schema(implementation = CreditAccountDto.class))})
     })
 
     @DeleteMapping("/{id}")

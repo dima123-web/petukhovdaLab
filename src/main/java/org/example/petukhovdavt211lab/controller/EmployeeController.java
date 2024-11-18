@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.example.petukhovdavt211lab.dto.EmployeeDto;
 import org.example.petukhovdavt211lab.entity.Employee;
 import org.example.petukhovdavt211lab.service.EmployeeService;
 import org.springframework.web.bind.annotation.*;
@@ -25,11 +26,11 @@ public class EmployeeController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Сотрудник создан",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Employee.class))})
+                            schema = @Schema(implementation = EmployeeDto.class))})
     })
 
     @PostMapping
-    public Employee createEmployee(@RequestParam("fullName") String fullName,
+    public EmployeeDto createEmployee(@RequestParam("fullName") String fullName,
                                    @RequestParam("birthDate") LocalDate birthDate,
                                    @RequestParam("position") String position,
                                    @RequestParam("bankId") Long bankId,
@@ -46,12 +47,12 @@ public class EmployeeController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "сотрудник найден",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Employee.class))})
+                            schema = @Schema(implementation = EmployeeDto.class))})
     })
 
     @GetMapping("/{id}")
-    public Employee getEmployeeById(@Parameter(description = "ID сотрудника") @PathVariable("id") Long id) {
-        return employeeService.getEmployeeById(id);
+    public EmployeeDto getEmployeeById(@Parameter(description = "ID сотрудника") @PathVariable("id") Long id) {
+        return employeeService.getEmployeeByIdDto(id);
     }
 
     // изменение данных сотрудника
@@ -59,11 +60,11 @@ public class EmployeeController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Данные изменены",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Employee.class))})
+                            schema = @Schema(implementation = EmployeeDto.class))})
     })
 
     @PatchMapping("/{id}")
-    public Employee updateEmployee(@PathVariable("id") Long id, @RequestParam("fullName") String fullName,
+    public EmployeeDto updateEmployee(@PathVariable("id") Long id, @RequestParam("fullName") String fullName,
                                    @RequestParam("position") String position,
                                    @RequestParam("bankId") Long bankId,
                                    @RequestParam("isRemote") Boolean isRemote,
@@ -79,7 +80,7 @@ public class EmployeeController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "сотрудник удален",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Employee.class))})
+                            schema = @Schema(implementation = EmployeeDto.class))})
     })
 
     @DeleteMapping("/{id}")

@@ -1,13 +1,14 @@
 package org.example.petukhovdavt211lab.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.example.petukhovdavt211lab.dto.BankOfficeDto;
 import org.example.petukhovdavt211lab.entity.Bank;
-import org.example.petukhovdavt211lab.entity.BankAtm;
 import org.example.petukhovdavt211lab.entity.BankOffice;
 import org.example.petukhovdavt211lab.repository.BankOfficeRepository;
 import org.example.petukhovdavt211lab.repository.BankRepository;
 import org.example.petukhovdavt211lab.service.BankOfficeService;
 import org.example.petukhovdavt211lab.service.BankService;
+import org.example.petukhovdavt211lab.service.mapper.BankOfficeMapper;
 import org.springframework.stereotype.Service;
 
 
@@ -18,11 +19,12 @@ public class BankOfficeServiceImpl implements BankOfficeService {
     private final BankOfficeRepository bankOfficeRepository;
     private final BankRepository bankRepository;
     private final BankService bankService;
+    private final BankOfficeMapper bankOfficeMapper;
 
     @Override
-    public BankOffice createBankOffice(Long bankId, String name, String address, Boolean status,
-                                 Boolean canPlaceAtm, Boolean canIssueLoan, Boolean isIssuingMoney,
-                                 Boolean isDepositingMoney, Integer rentalCost) {
+    public BankOfficeDto createBankOffice(Long bankId, String name, String address, Boolean status,
+                                          Boolean canPlaceAtm, Boolean canIssueLoan, Boolean isIssuingMoney,
+                                          Boolean isDepositingMoney, Integer rentalCost) {
         BankOffice bankOffice = new BankOffice();
         Bank bank = bankService.getBankById(bankId);
         bank.setCountOffices(bank.getCountOffices() + 1);
@@ -39,7 +41,7 @@ public class BankOfficeServiceImpl implements BankOfficeService {
         bankOffice.setRentalCost(rentalCost);
         bankRepository.save(bank);
         bankOfficeRepository.save(bankOffice);
-        return bankOffice;
+        return bankOfficeMapper.toDto(bankOffice);
     }
 
     @Override
@@ -49,7 +51,12 @@ public class BankOfficeServiceImpl implements BankOfficeService {
     }
 
     @Override
-    public BankOffice updateBankOffice(Long id, Long bankId, String name, String address, Boolean status,
+    public BankOfficeDto getBankOfficeByIdDto(Long id) {
+        return bankOfficeMapper.toDto(getBankOfficeById(id));
+    }
+
+    @Override
+    public BankOfficeDto updateBankOffice(Long id, Long bankId, String name, String address, Boolean status,
                                  Boolean canPlaceAtm, Boolean canIssueLoan, Boolean isIssuingMoney,
                                  Boolean isDepositingMoney, Integer rentalCost) {
         BankOffice bankOffice = getBankOfficeById(id);
@@ -63,7 +70,7 @@ public class BankOfficeServiceImpl implements BankOfficeService {
         bankOffice.setIsDepositingMoney(isDepositingMoney);
         bankOffice.setRentalCost(rentalCost);
         bankOfficeRepository.save(bankOffice);
-        return bankOffice;
+        return bankOfficeMapper.toDto(bankOffice);
     }
 
     @Override

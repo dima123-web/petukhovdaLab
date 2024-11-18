@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.example.petukhovdavt211lab.dto.BankDto;
 import org.example.petukhovdavt211lab.entity.Bank;
 import org.example.petukhovdavt211lab.service.BankService;
 import org.springframework.web.bind.annotation.*;
@@ -23,11 +24,11 @@ public class BankController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Банк создан",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Bank.class))})
+                            schema = @Schema(implementation = BankDto.class))})
     })
 
     @PostMapping
-    public Bank createBank(@Parameter(description = "Название банка") @RequestParam("name") String name) {
+    public BankDto createBank(@Parameter(description = "Название банка") @RequestParam("name") String name) {
         return bankService.createBank(name);
     }
 
@@ -36,12 +37,12 @@ public class BankController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Банк найден",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Bank.class))})
+                            schema = @Schema(implementation = BankDto.class))})
     })
 
     @GetMapping("/{id}")
-    public Bank getBankById(@Parameter(description = "ID банка") @PathVariable("id") Long id) {
-        return bankService.getBankById(id);
+    public BankDto getBankById(@Parameter(description = "ID банка") @PathVariable("id") Long id) {
+        return bankService.getBankByIdDto(id);
     }
 
     // изменение данных в банке
@@ -49,11 +50,11 @@ public class BankController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Данные изменены",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Bank.class))})
+                            schema = @Schema(implementation = BankDto.class))})
     })
 
     @PatchMapping("/{id}")
-    public Bank updateBank(@Parameter(description = "ID банка") @PathVariable("id") Long id,
+    public BankDto updateBank(@Parameter(description = "ID банка") @PathVariable("id") Long id,
                            @RequestParam("name") String name) {
         return bankService.updateBank(id, name);
     }
@@ -63,7 +64,7 @@ public class BankController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Банк удален",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Bank.class))})
+                            schema = @Schema(implementation = BankDto.class))})
     })
 
     @DeleteMapping("/{id}")

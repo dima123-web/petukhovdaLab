@@ -2,9 +2,11 @@ package org.example.petukhovdavt211lab.service.impl;
 
 
 import lombok.RequiredArgsConstructor;
+import org.example.petukhovdavt211lab.dto.BankDto;
 import org.example.petukhovdavt211lab.entity.Bank;
 import org.example.petukhovdavt211lab.repository.BankRepository;
 import org.example.petukhovdavt211lab.service.BankService;
+import org.example.petukhovdavt211lab.service.mapper.BankMapper;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,9 +14,10 @@ import org.springframework.stereotype.Service;
 public class BankServiceImpl implements BankService {
 
     private final BankRepository bankRepository;
+    private final BankMapper bankMapper;
 
     @Override
-    public Bank createBank(String name) {
+    public BankDto createBank(String name) {
         Bank bank = new Bank();
         bank.setName(name);
         bank.setCountOffices(0);
@@ -25,7 +28,7 @@ public class BankServiceImpl implements BankService {
         bank.setTotalMoney((int)(Math.random() * 1_000_001));
         bank.setInterestRate((float)(Math.random() * (20 - (bank.getRating() / 5.0)) + 1));
         bankRepository.save(bank);
-        return bank;
+        return bankMapper.toDto(bank);
     }
 
     @Override
@@ -34,11 +37,16 @@ public class BankServiceImpl implements BankService {
     }
 
     @Override
-    public Bank updateBank(Long id, String name) {
+    public BankDto getBankByIdDto(Long id) {
+        return bankMapper.toDto(getBankById(id));
+    }
+
+    @Override
+    public BankDto updateBank(Long id, String name) {
         Bank bank = getBankById(id);
         bank.setName(name);
         bankRepository.save(bank);
-        return bank;
+        return bankMapper.toDto(bank);
     }
 
     @Override

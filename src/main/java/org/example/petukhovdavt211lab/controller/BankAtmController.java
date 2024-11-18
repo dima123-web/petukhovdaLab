@@ -7,10 +7,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.example.petukhovdavt211lab.dto.BankAtmDto;
 import org.example.petukhovdavt211lab.entity.BankAtm;
 import org.example.petukhovdavt211lab.service.BankAtmService;
 import org.springframework.web.bind.annotation.*;
-;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -24,17 +25,17 @@ public class BankAtmController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "банкомат создан",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = BankAtm.class))})
+                            schema = @Schema(implementation = BankAtmDto.class))})
     })
 
     @PostMapping
-    public BankAtm createBankAtm(@RequestParam("name") String name, @RequestParam("address") String address,
-                                  @RequestParam("status") Boolean status, @RequestParam("bankId") Long bankId,
-                                  @RequestParam("bankOfficeId") Long bankOfficeId,
-                                  @RequestParam("employeeId") Long employeeId,
-                                  @RequestParam("isIssuingMoney") Boolean isIssuingMoney,
-                                  @RequestParam("isDepositingMoney") Boolean isDepositingMoney,
-                                  @RequestParam("servicingCost") Integer servicingCost) {
+    public BankAtmDto createBankAtm(@RequestParam("name") String name, @RequestParam("address") String address,
+                                    @RequestParam("status") Boolean status, @RequestParam("bankId") Long bankId,
+                                    @RequestParam("bankOfficeId") Long bankOfficeId,
+                                    @RequestParam("employeeId") Long employeeId,
+                                    @RequestParam("isIssuingMoney") Boolean isIssuingMoney,
+                                    @RequestParam("isDepositingMoney") Boolean isDepositingMoney,
+                                    @RequestParam("servicingCost") Integer servicingCost) {
         return bankAtmService.createBankAtm(name, address, status, bankId, bankOfficeId,
                 employeeId, isIssuingMoney, isDepositingMoney, servicingCost);
     }
@@ -44,12 +45,12 @@ public class BankAtmController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "банкомат найден",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = BankAtm.class))})
+                            schema = @Schema(implementation = BankAtmDto.class))})
     })
 
     @GetMapping("/{id}")
-    public BankAtm getBankAtmById(@Parameter(description = "ID банкомата") @PathVariable("id") Long id) {
-        return bankAtmService.getBankAtmById(id);
+    public BankAtmDto getBankAtmById(@Parameter(description = "ID банкомата") @PathVariable("id") Long id) {
+        return bankAtmService.getBankAtmByIdDto(id);
     }
 
     // изменение данных банкомата
@@ -61,7 +62,7 @@ public class BankAtmController {
     })
 
     @PatchMapping("/{id}")
-    public BankAtm updateBankAtm(@PathVariable("id") Long id, @RequestParam("name") String name,
+    public BankAtmDto updateBankAtm(@PathVariable("id") Long id, @RequestParam("name") String name,
                                  @RequestParam("address") String address, @RequestParam("status") Boolean status,
                                  @RequestParam("bankId") Long bankId, @RequestParam("bankOfficeId") Long bankOfficeId,
                                  @RequestParam("employeeId") Long employeeId,

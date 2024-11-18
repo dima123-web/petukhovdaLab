@@ -2,6 +2,7 @@ package org.example.petukhovdavt211lab.service.impl;
 
 
 import lombok.RequiredArgsConstructor;
+import org.example.petukhovdavt211lab.dto.CreditAccountDto;
 import org.example.petukhovdavt211lab.entity.Bank;
 import org.example.petukhovdavt211lab.entity.CreditAccount;
 import org.example.petukhovdavt211lab.entity.PaymentAccount;
@@ -9,6 +10,7 @@ import org.example.petukhovdavt211lab.entity.User;
 import org.example.petukhovdavt211lab.repository.CreditAccountRepository;
 import org.example.petukhovdavt211lab.repository.UserRepository;
 import org.example.petukhovdavt211lab.service.*;
+import org.example.petukhovdavt211lab.service.mapper.CreditAccountMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -23,6 +25,7 @@ public class CreditAccountServiceImpl implements CreditAccountService {
     private final EmployeeService employeeService;
     private final PaymentAccountService paymentAccountService;
     private final UserRepository userRepository;
+    private final CreditAccountMapper creditAccountMapper;
 
     public User addCreditAccountToUser(Long userId, Long creditAccountId) {
         User user = userService.getUserById(userId);
@@ -32,9 +35,9 @@ public class CreditAccountServiceImpl implements CreditAccountService {
     }
 
     @Override
-    public CreditAccount createCreditAccount(Long userId, Long bankId, LocalDate startDate, LocalDate endDate,
-                                             Integer loanAmount, Float interestRate, Long issuingEmployeeId,
-                                             Long paymentAccountId) {
+    public CreditAccountDto createCreditAccount(Long userId, Long bankId, LocalDate startDate, LocalDate endDate,
+                                                Integer loanAmount, Float interestRate, Long issuingEmployeeId,
+                                                Long paymentAccountId) {
         CreditAccount creditAccount = new CreditAccount();
         creditAccount.setUser(userService.getUserById(userId));
         Bank bank = bankService.getBankById(bankId);
@@ -55,7 +58,7 @@ public class CreditAccountServiceImpl implements CreditAccountService {
         creditAccount.setPaymentAccount(paymentAccountService.getPaymentAccountById(paymentAccountId));
         creditAccountRepository.save(creditAccount);
         addCreditAccountToUser(userId, creditAccount.getId());
-        return creditAccount;
+        return creditAccountMapper.toDto(creditAccount);
     }
 
     @Override
@@ -65,11 +68,16 @@ public class CreditAccountServiceImpl implements CreditAccountService {
     }
 
     @Override
-    public CreditAccount updateCreditAccount(Long id, Long paymentAccountId) {
+    public CreditAccountDto getCreditAccountByIdDto(Long id) {
+        return creditAccountMapper.toDto(getCreditAccountById(id));
+    }
+
+    @Override
+    public CreditAccountDto updateCreditAccount(Long id, Long paymentAccountId) {
         CreditAccount creditAccount = getCreditAccountById(id);
         creditAccount.setPaymentAccount(paymentAccountService.getPaymentAccountById(paymentAccountId));
         creditAccountRepository.save(creditAccount);
-        return creditAccount;
+        return creditAccountMapper.toDto(creditAccount);
     }
 
     @Override

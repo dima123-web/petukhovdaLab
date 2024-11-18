@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.example.petukhovdavt211lab.dto.PaymentAccountDto;
 import org.example.petukhovdavt211lab.entity.Employee;
 import org.example.petukhovdavt211lab.entity.PaymentAccount;
 import org.example.petukhovdavt211lab.service.EmployeeService;
@@ -27,11 +28,11 @@ public class PaymentAccountController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "платежный счет создан",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = PaymentAccount.class))})
+                            schema = @Schema(implementation = PaymentAccountDto.class))})
     })
 
     @PostMapping
-    public PaymentAccount createPaymentAccount(@RequestParam("userId") Long userId,
+    public PaymentAccountDto createPaymentAccount(@RequestParam("userId") Long userId,
                                                @RequestParam("bankId") Long bankId) {
         return paymentAccountService.createPaymentAccount(userId, bankId);
     }
@@ -41,13 +42,13 @@ public class PaymentAccountController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "платежный счет найден",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = PaymentAccount.class))})
+                            schema = @Schema(implementation = PaymentAccountDto.class))})
     })
 
     @GetMapping("/{id}")
-    public PaymentAccount getPaymentAccountById(@Parameter(description = "ID платежного счета")
+    public PaymentAccountDto getPaymentAccountById(@Parameter(description = "ID платежного счета")
                                                     @PathVariable("id") Long id) {
-        return paymentAccountService.getPaymentAccountById(id);
+        return paymentAccountService.getPaymentAccountByIdDto(id);
     }
 
     // изменение данных платежного счета
@@ -55,11 +56,11 @@ public class PaymentAccountController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Данные изменены",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = PaymentAccount.class))})
+                            schema = @Schema(implementation = PaymentAccountDto.class))})
     })
 
     @PatchMapping("/{id}")
-    public PaymentAccount updatePaymentAccount(@PathVariable("id") Long id, @RequestParam("amount") Integer amount) {
+    public PaymentAccountDto updatePaymentAccount(@PathVariable("id") Long id, @RequestParam("amount") Integer amount) {
         return paymentAccountService.updatePaymentAccount(id, amount);
     }
 
@@ -68,7 +69,7 @@ public class PaymentAccountController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "платежный счет удален",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = PaymentAccount.class))})
+                            schema = @Schema(implementation = PaymentAccountDto.class))})
     })
 
     @DeleteMapping("/{id}")

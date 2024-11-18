@@ -1,6 +1,7 @@
 package org.example.petukhovdavt211lab.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.example.petukhovdavt211lab.dto.BankAtmDto;
 import org.example.petukhovdavt211lab.entity.*;
 import org.example.petukhovdavt211lab.repository.BankAtmRepository;
 import org.example.petukhovdavt211lab.repository.BankRepository;
@@ -8,6 +9,7 @@ import org.example.petukhovdavt211lab.service.BankAtmService;
 import org.example.petukhovdavt211lab.service.BankOfficeService;
 import org.example.petukhovdavt211lab.service.BankService;
 import org.example.petukhovdavt211lab.service.EmployeeService;
+import org.example.petukhovdavt211lab.service.mapper.BankAtmMapper;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,11 +21,12 @@ public class BankAtmServiceImpl implements BankAtmService {
     private final BankService bankService;
     private final BankOfficeService bankOfficeService;
     private final EmployeeService employeeService;
+    private final BankAtmMapper bankAtmMapper;
 
     @Override
-    public BankAtm createBankAtm(String name, String address, Boolean status, Long bankId,
-                              Long bankOfficeId, Long employeeId, Boolean isIssuingMoney,
-                              Boolean isDepositingMoney, Integer servicingCost) {
+    public BankAtmDto createBankAtm(String name, String address, Boolean status, Long bankId,
+                                    Long bankOfficeId, Long employeeId, Boolean isIssuingMoney,
+                                    Boolean isDepositingMoney, Integer servicingCost) {
         BankAtm bankAtm = new BankAtm();
         bankAtm.setName(name);
         bankAtm.setAddress(address);
@@ -39,7 +42,7 @@ public class BankAtmServiceImpl implements BankAtmService {
         bankAtm.setServicingCost(servicingCost);
         bankRepository.save(bank);
         bankAtmRepository.save(bankAtm);
-        return bankAtm;
+        return bankAtmMapper.toDto(bankAtm);
     }
 
     @Override
@@ -48,8 +51,14 @@ public class BankAtmServiceImpl implements BankAtmService {
                 orElseThrow(() -> new RuntimeException("Bank Atm not found with id " + id));
     }
 
+    public BankAtmDto getBankAtmByIdDto(Long id) {
+        return bankAtmMapper.toDto(getBankAtmById(id));
+    }
+
+
+
     @Override
-    public BankAtm updateBankAtm(Long id, String name, String address, Boolean status, Long bankId,
+    public BankAtmDto updateBankAtm(Long id, String name, String address, Boolean status, Long bankId,
                               Long bankOfficeId, Long employeeId, Boolean isIssuingMoney,
                               Boolean isDepositingMoney, Integer servicingCost) {
         BankAtm bankAtm = getBankAtmById(id);
@@ -64,7 +73,7 @@ public class BankAtmServiceImpl implements BankAtmService {
         bankAtm.setIsDepositingMoney(isDepositingMoney);
         bankAtm.setServicingCost(servicingCost);
         bankAtmRepository.save(bankAtm);
-        return bankAtm;
+        return bankAtmMapper.toDto(bankAtm);
     }
 
     @Override

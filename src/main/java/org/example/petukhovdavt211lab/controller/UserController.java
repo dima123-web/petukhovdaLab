@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.example.petukhovdavt211lab.dto.UserDto;
 import org.example.petukhovdavt211lab.entity.User;
 import org.example.petukhovdavt211lab.service.UserService;
 import org.springframework.web.bind.annotation.*;
@@ -25,11 +26,11 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "пользователь создан",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = User.class))})
+                            schema = @Schema(implementation = UserDto.class))})
     })
 
     @PostMapping
-    public User createUser(@RequestParam("fullName") String fullName,
+    public UserDto createUser(@RequestParam("fullName") String fullName,
                                @RequestParam("birthDate") LocalDate birthDate,
                                @RequestParam("workplace") String workplace) {
         return userService.createUser(fullName, birthDate, workplace);
@@ -40,12 +41,12 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "пользователь найден",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = User.class))})
+                            schema = @Schema(implementation = UserDto.class))})
     })
 
     @GetMapping("/{id}")
-    public User getUserById(@Parameter(description = "ID пользователя") @PathVariable("id") Long id) {
-        return userService.getUserById(id);
+    public UserDto getUserById(@Parameter(description = "ID пользователя") @PathVariable("id") Long id) {
+        return userService.getUserByIdDto(id);
     }
 
     // изменение данных пользователя
@@ -53,11 +54,11 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Данные изменены",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = User.class))})
+                            schema = @Schema(implementation = UserDto.class))})
     })
 
     @PatchMapping("/{id}")
-    public User updateUser(@PathVariable("id") Long id, @RequestParam("fullName") String fullName,
+    public UserDto updateUser(@PathVariable("id") Long id, @RequestParam("fullName") String fullName,
                            @RequestParam("workplace") String workplace) {
         return userService.updateUser(id, fullName, workplace);
     }
@@ -67,7 +68,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "пользователь удален",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = User.class))})
+                            schema = @Schema(implementation = UserDto.class))})
     })
 
     @DeleteMapping("/{id}")

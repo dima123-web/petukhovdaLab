@@ -1,6 +1,7 @@
 package org.example.petukhovdavt211lab.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.example.petukhovdavt211lab.dto.EmployeeDto;
 import org.example.petukhovdavt211lab.entity.Bank;
 import org.example.petukhovdavt211lab.entity.BankOffice;
 import org.example.petukhovdavt211lab.entity.Employee;
@@ -9,6 +10,7 @@ import org.example.petukhovdavt211lab.repository.EmployeeRepository;
 import org.example.petukhovdavt211lab.service.BankOfficeService;
 import org.example.petukhovdavt211lab.service.BankService;
 import org.example.petukhovdavt211lab.service.EmployeeService;
+import org.example.petukhovdavt211lab.service.mapper.EmployeeMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -21,10 +23,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final BankRepository bankRepository;
     private final BankService bankService;
     private final BankOfficeService bankOfficeService;
+    private final EmployeeMapper employeeMapper;
 
     @Override
-    public Employee createEmployee(String fullName, LocalDate birthDate, String position, Long bankId,
-                                   Boolean isRemote, Long bankOfficeId, Boolean canIssueLoans, Integer salary) {
+    public EmployeeDto createEmployee(String fullName, LocalDate birthDate, String position, Long bankId,
+                                      Boolean isRemote, Long bankOfficeId, Boolean canIssueLoans, Integer salary) {
         Employee employee = new Employee();
         employee.setFullName(fullName);
         employee.setBirthDate(birthDate);
@@ -38,7 +41,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setSalary(salary);
         bankRepository.save(bank);
         employeeRepository.save(employee);
-        return employee;
+        return employeeMapper.toDto(employee);
     }
 
     @Override
@@ -48,7 +51,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Employee updateEmployee(Long id, String fullName, String position, Long bankId,
+    public EmployeeDto getEmployeeByIdDto(Long id) {
+        return employeeMapper.toDto(getEmployeeById(id));
+    }
+
+    @Override
+    public EmployeeDto updateEmployee(Long id, String fullName, String position, Long bankId,
                                    Boolean isRemote, Long bankOfficeId, Boolean canIssueLoans, Integer salary) {
         Employee employee = getEmployeeById(id);
         employee.setFullName(fullName);
@@ -59,7 +67,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setCanIssueLoans(canIssueLoans);
         employee.setSalary(salary);
         employeeRepository.save(employee);
-        return employee;
+        return employeeMapper.toDto(employee);
     }
 
     @Override
